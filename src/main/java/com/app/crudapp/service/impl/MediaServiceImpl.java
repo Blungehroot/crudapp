@@ -6,14 +6,18 @@ import com.app.crudapp.repository.MediaRepository;
 import com.app.crudapp.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class MediaServiceImpl implements MediaService {
+    @Autowired
     private final MediaRepository mediaRepository;
 
     @Override

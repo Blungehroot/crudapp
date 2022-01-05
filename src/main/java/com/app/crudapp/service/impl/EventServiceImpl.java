@@ -5,14 +5,18 @@ import com.app.crudapp.repository.EventRepository;
 import com.app.crudapp.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class EventServiceImpl implements EventService {
+    @Autowired
     private final EventRepository eventRepository;
 
     @Override

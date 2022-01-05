@@ -1,6 +1,5 @@
 package com.app.crudapp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -17,14 +16,13 @@ public class Event implements Serializable {
     private Integer id;
 
     @Column
-    private String eventName;
+    private EventActions eventName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "media_id")
-    @JsonBackReference
+    @JoinColumn(name = "media_id", referencedColumnName = "id")
     private Media media;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }

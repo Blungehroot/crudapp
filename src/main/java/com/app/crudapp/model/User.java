@@ -20,8 +20,9 @@ public class User implements Serializable {
     private String name;
 
     @Column
-    private String role;
+    private UserRoles role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Event> events;
 }
