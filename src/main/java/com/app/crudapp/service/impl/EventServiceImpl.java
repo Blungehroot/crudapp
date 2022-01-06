@@ -22,7 +22,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(int id) {
         log.debug("Get event by id: {}", id);
-        return eventRepository.getById(id);
+        return eventRepository.findById(id).get();
     }
 
     @Override

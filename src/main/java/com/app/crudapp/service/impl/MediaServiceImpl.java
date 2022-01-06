@@ -23,7 +23,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media getById(int id) {
         log.debug("Get media by id: {}", id);
-        return mediaRepository.getById(id);
+        return mediaRepository.findById(id).get();
     }
 
     @Override

@@ -16,13 +16,12 @@ public class Media implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(name = "filename")
     private String fileName;
 
-    @Column
+    @Column(name = "filelink")
     private String fileLink;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "media")
     private Event event;
 }
