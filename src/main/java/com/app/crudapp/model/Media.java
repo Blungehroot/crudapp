@@ -1,6 +1,5 @@
 package com.app.crudapp.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -16,11 +15,11 @@ public class Media implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "filename")
-    private String fileName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "filelink")
-    private String fileLink;
+    @Column(name = "url")
+    private String url;
 
     @OneToOne(mappedBy = "media")
     private Event event;

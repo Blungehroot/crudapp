@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS media
 (
     id int(11) NOT NULL auto_increment,
-    filename varchar(250)  NOT NULL,
-    filelink varchar(1500)  NOT NULL,
+    name varchar(250)  NOT NULL,
+    url varchar(1500)  NOT NULL,
     PRIMARY KEY  (id)
 );
 

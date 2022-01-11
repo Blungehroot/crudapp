@@ -1,5 +1,6 @@
 package com.app.crudapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Table(name = "events")
 @Data
 @RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media", "user"})
 public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
