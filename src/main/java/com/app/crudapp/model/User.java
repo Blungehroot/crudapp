@@ -22,6 +22,9 @@ public class User implements Serializable {
     @Column
     private UserRoles role;
 
+    @Column
+    private String password;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
 }

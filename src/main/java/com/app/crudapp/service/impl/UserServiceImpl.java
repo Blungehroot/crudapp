@@ -7,6 +7,7 @@ import com.app.crudapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoded;
 
     @Override
     public User getById(int id) {
@@ -35,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        user.setPassword(passwordEncoded.encode(user.getPassword()));
         user = userRepository.save(user);
         log.debug("The new user was created, id: {}", user.getId());
         return user;
