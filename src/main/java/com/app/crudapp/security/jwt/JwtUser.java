@@ -1,9 +1,6 @@
 package com.app.crudapp.security.jwt;
 
-import com.app.crudapp.model.UserRoles;
-import com.app.crudapp.security.JwtUserDetailsService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,14 +10,12 @@ import java.util.Collection;
 public class JwtUser implements UserDetails {
     private final int id;
     private final String name;
-    private final UserRoles role;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(int id, String name, UserRoles role, String password, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(int id, String name, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
-        this.role = role;
         this.password = password;
         this.authorities = authorities;
     }

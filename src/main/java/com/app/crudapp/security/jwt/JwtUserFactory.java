@@ -1,7 +1,7 @@
 package com.app.crudapp.security.jwt;
 
+import com.app.crudapp.model.Role;
 import com.app.crudapp.model.User;
-import com.app.crudapp.model.UserRoles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -14,12 +14,12 @@ public final class JwtUserFactory {
     }
 
     public static JwtUser create(User user) {
-        return new JwtUser(user.getId(), user.getName(), user.getRole(), user.getPassword(), null);
+        return new JwtUser(user.getId(), user.getName(), user.getPassword(), null);
     }
 
-    private static List<GrantedAuthority> mapToGrantedAuthorities(List<UserRoles> roles) {
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> roles) {
         return roles.stream().map(role ->
-                new SimpleGrantedAuthority(role.getRole())
+                new SimpleGrantedAuthority(role.getName())
         ).collect(Collectors.toList());
     }
 

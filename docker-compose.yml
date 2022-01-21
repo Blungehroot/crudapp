@@ -10,5 +10,3 @@ services:
       MYSQL_DATABASE: crudapp
     ports:
       - "3308:3306"
-    volumes:
-      - ./sql:/docker-entrypoint-initdb.d

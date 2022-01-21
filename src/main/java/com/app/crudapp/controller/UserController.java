@@ -2,7 +2,6 @@ package com.app.crudapp.controller;
 
 import com.app.crudapp.model.User;
 import com.app.crudapp.service.UserService;
-import com.app.crudapp.utils.validation.UserValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public User createUser(@RequestBody User user) {
-        UserValidation userValidation = new UserValidation();
-        return userService.save(userValidation.setUserRole(user));
+        return userService.save(user);
     }
 
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
