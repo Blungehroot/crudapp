@@ -12,12 +12,14 @@ public class JwtUser implements UserDetails {
     private final String name;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+    private final boolean enabled;
 
-    public JwtUser(int id, String name, String password, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(int id, String name, String password, Collection<? extends GrantedAuthority> authorities, boolean enabled) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.authorities = authorities;
+        this.enabled = enabled;
     }
 
     @Override
@@ -44,13 +46,13 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @JsonIgnore
@@ -62,6 +64,6 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }
