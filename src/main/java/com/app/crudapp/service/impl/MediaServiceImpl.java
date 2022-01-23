@@ -1,14 +1,15 @@
 package com.app.crudapp.service.impl;
 
-import com.app.crudapp.model.Event;
 import com.app.crudapp.model.Media;
 import com.app.crudapp.repository.MediaRepository;
 import com.app.crudapp.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.nio.file.Files;
@@ -46,8 +47,8 @@ public class MediaServiceImpl implements MediaService {
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
-        media.setName(file.getName());
-        media.setUrl(file.getOriginalFilename());
+        media.setName(file.getOriginalFilename());
+        media.setUrl(root + "/" + file.getOriginalFilename());
         media = mediaRepository.save(media);
         log.debug("The new media was created, id: {}", media.getId());
         return media;
