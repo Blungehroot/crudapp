@@ -12,15 +12,6 @@ public class UserDto {
     private String name;
     private Status status;
 
-    public User toUser() {
-        User user = new User();
-        user.setId(id);
-        user.setName(name);
-        user.setStatus(status);
-
-        return user;
-    }
-
     public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
