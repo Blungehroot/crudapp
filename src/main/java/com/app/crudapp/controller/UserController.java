@@ -41,7 +41,6 @@ public class UserController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userService.getAll();
         List<UserDto> result = new ArrayList<>();

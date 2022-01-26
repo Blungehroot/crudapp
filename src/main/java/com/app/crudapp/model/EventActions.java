@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum EventActions {
     CREATE("created"),
-    UPDATE("updated");
+    DELETE("deleted");
 
     private final String action;
 }
