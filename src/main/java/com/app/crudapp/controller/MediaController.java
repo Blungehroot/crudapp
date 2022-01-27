@@ -65,4 +65,10 @@ public class MediaController {
     public Media getMedia(@PathVariable Integer mediaId) {
         return mediaService.getById(mediaId);
     }
+
+    @DeleteMapping(value = "/mediaId")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMedia(@PathVariable Integer mediaId) {
+        mediaService.deleteById(mediaId);
+    }
 }
