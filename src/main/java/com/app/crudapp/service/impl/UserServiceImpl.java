@@ -59,7 +59,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         log.info("Starting update the user with id: {}", user.getId());
-        return userRepository.save(user);
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        List<Role> userRoles = new ArrayList<>();
+        User current = userRepository.getById(user.getId());
+        userRoles.add(userRole);
+        current.setId(user.getId());
+        current.setName(user.getName());
+        current.setPassword(passwordEncoded.encode(user.getPassword()));
+        current.setRoles(userRoles);
+        return userRepository.save(current);
     }
 
     @Override
