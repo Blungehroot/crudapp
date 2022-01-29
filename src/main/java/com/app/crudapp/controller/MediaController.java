@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,7 @@ public class MediaController {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -59,6 +61,7 @@ public class MediaController {
         return mediaService.getAll();
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{mediaId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -66,6 +69,7 @@ public class MediaController {
         return mediaService.getById(mediaId);
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @DeleteMapping(value = "/mediaId")
     @ResponseStatus(HttpStatus.OK)
     public void deleteMedia(@PathVariable Integer mediaId) {

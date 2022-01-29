@@ -1,5 +1,6 @@
 package com.app.crudapp.dto;
 
+import com.app.crudapp.model.Event;
 import com.app.crudapp.model.Role;
 import com.app.crudapp.model.Status;
 import com.app.crudapp.model.User;
@@ -15,13 +16,16 @@ public class UserDto {
     private String name;
     private Status status;
     private List<Role> roles;
+    private List<Event> events;
 
     public static UserDto fromUser(User user) {
         UserDto userDto = new UserDto();
+
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setStatus(user.getStatus());
         userDto.setRoles(user.getRoles());
+        userDto.setEvents(user.getEvents());
 
         return userDto;
     }
