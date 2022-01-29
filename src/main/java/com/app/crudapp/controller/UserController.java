@@ -25,12 +25,10 @@ import java.util.List;
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
     private UserService userService;
-    private EventService eventService;
 
     @Autowired
-    public UserController(UserService userService, EventService eventService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.eventService = eventService;
     }
 
     @Secured("ROLE_ADMIN")
