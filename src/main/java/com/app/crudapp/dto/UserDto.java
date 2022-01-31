@@ -1,9 +1,6 @@
 package com.app.crudapp.dto;
 
-import com.app.crudapp.model.Event;
-import com.app.crudapp.model.Role;
-import com.app.crudapp.model.Status;
-import com.app.crudapp.model.User;
+import com.app.crudapp.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 

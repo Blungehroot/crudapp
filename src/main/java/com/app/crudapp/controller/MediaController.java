@@ -1,28 +1,33 @@
 package com.app.crudapp.controller;
 
+
+import com.app.crudapp.dto.UserDto;
 import com.app.crudapp.model.Event;
 import com.app.crudapp.model.Media;
 import com.app.crudapp.model.User;
 import com.app.crudapp.service.EventService;
 import com.app.crudapp.service.MediaService;
 import com.app.crudapp.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Base64;
 import java.util.List;
 
 import static com.app.crudapp.model.EventActions.CREATE;
 
 @RestController
 @RequestMapping(value = "/api/v1/media")
-@Validated
 public class MediaController {
     private final MediaService mediaService;
     private final UserService userService;
@@ -35,12 +40,22 @@ public class MediaController {
         this.eventService = eventService;
     }
 
+    private User getUserFromToken(HttpHeaders httpHeaders) throws JsonProcessingException {
+        String token = httpHeaders.getFirst("Authorization");
+        String[] chunks = token.split("\\.");
+        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode actualObj = mapper.readTree(payload);
+
+        return userService.findByName(actualObj.get("sub").asText());
+    }
+
     @PostMapping
-    public ResponseEntity<Media> createMedia(@RequestParam("file") MultipartFile file, @RequestHeader(value = "user_id") String userId) {
+    public ResponseEntity<Media> createMedia(@RequestHeader HttpHeaders httpHeaders, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
         try {
-            User user = userService.getById(Integer.parseInt(userId));
+            User user = getUserFromToken(httpHeaders);
             Event event = new Event();
-            Media media = mediaService.save(file);
+            Media media = mediaService.save(file, user);
             event.setEventName(CREATE);
             event.setUser(user);
             event.setMedia(media);
@@ -75,4 +90,11 @@ public class MediaController {
     public void deleteMedia(@PathVariable Integer mediaId) {
         mediaService.deleteById(mediaId);
     }
+
+    /*@GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Media>> getMyMedia(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
+        User user = getUserFromToken(httpHeaders);
+
+        return new ResponseEntity<>();
+    }*/
 }

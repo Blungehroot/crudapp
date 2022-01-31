@@ -2,7 +2,6 @@ package com.app.crudapp.controller;
 
 import com.app.crudapp.dto.UserDto;
 import com.app.crudapp.model.User;
-import com.app.crudapp.service.EventService;
 import com.app.crudapp.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -68,7 +67,7 @@ public class UserController {
         userService.deleteById(userId);
     }
 
-    @GetMapping(value = "/myinfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/my-info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getMyInfo(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
         String token = httpHeaders.getFirst("Authorization");
         String[] chunks = token.split("\\.");

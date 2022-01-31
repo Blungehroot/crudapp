@@ -1,5 +1,6 @@
 package com.app.crudapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @Table(name = "media")
 @Data
 @RequiredArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "event", "user"})
 public class Media implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +25,9 @@ public class Media implements Serializable {
 
     @OneToOne(mappedBy = "media")
     private Event event;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_media", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "media_id", referencedColumnName = "id")})
+    private User user;
 }
