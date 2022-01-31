@@ -30,6 +30,16 @@ public class UserController {
         this.userService = userService;
     }
 
+    private User getUserFromToken(HttpHeaders httpHeaders) throws JsonProcessingException {
+        String token = httpHeaders.getFirst("Authorization");
+        String[] chunks = token.split("\\.");
+        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode actualObj = mapper.readTree(payload);
+
+        return userService.findByName(actualObj.get("sub").asText());
+    }
+
     @Secured("ROLE_ADMIN")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createUser(@RequestBody User user) {
@@ -69,13 +79,7 @@ public class UserController {
 
     @GetMapping(value = "/my-info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getMyInfo(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
-        String token = httpHeaders.getFirst("Authorization");
-        String[] chunks = token.split("\\.");
-        String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode actualObj = mapper.readTree(payload);
-
-        User user = userService.findByName(actualObj.get("sub").asText());
+        User user = getUserFromToken(httpHeaders);
         UserDto userDto = UserDto.fromUser(user);
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
