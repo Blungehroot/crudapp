@@ -26,4 +26,15 @@ public class UserDto {
 
         return userDto;
     }
+
+    public User toUser(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setStatus(userDto.getStatus());
+        user.setRoles(userDto.getRoles());
+        user.setEvents(userDto.getEvents());
+
+        return user;
+    }
 }

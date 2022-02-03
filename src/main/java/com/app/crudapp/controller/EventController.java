@@ -1,5 +1,6 @@
 package com.app.crudapp.controller;
 
+import com.app.crudapp.dto.EventDto;
 import com.app.crudapp.model.Event;
 import com.app.crudapp.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,20 +28,25 @@ public class EventController {
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Event>> getAllEvents() {
+    public ResponseEntity<List<EventDto>> getAllEvents() {
         List<Event> events = eventService.getAll();
-        return new ResponseEntity<>(events, HttpStatus.OK);
+        List<EventDto> result = new ArrayList<>();
+        events.forEach(event -> result.add(EventDto.fromEvent(event)));
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{eventId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> getEventById(@PathVariable Integer eventId) {
+    public ResponseEntity<EventDto> getEventById(@PathVariable Integer eventId) {
         Event event = eventService.getById(eventId);
 
         if (event == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(event, HttpStatus.OK);
+        EventDto eventDto = EventDto.fromEvent(event);
+
+        return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
 }
