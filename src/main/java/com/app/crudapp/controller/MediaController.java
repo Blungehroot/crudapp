@@ -11,6 +11,7 @@ import com.app.crudapp.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,11 @@ import java.util.Base64;
 import java.util.List;
 
 import static com.app.crudapp.model.EventActions.CREATE;
+import static com.app.crudapp.model.EventActions.DELETE;
 
 @RestController
 @RequestMapping(value = "/api/v1/media")
+@Slf4j
 public class MediaController {
     private final MediaService mediaService;
     private final UserService userService;
@@ -85,9 +88,17 @@ public class MediaController {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
-    @DeleteMapping(value = "/mediaId")
+    @DeleteMapping(value = "/{mediaId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteMedia(@PathVariable Integer mediaId) {
+    public void deleteMedia(@RequestHeader HttpHeaders httpHeaders, @PathVariable Integer mediaId) throws JsonProcessingException {
+        User user = getUserFromToken(httpHeaders);
+        Event event = new Event();
+        Media media = mediaService.getById(mediaId);
+        log.info("Get media: {}", media.getId());
+        event.setEventName(DELETE);
+        event.setUser(user);
+        event.setMedia(media);
+        eventService.save(event);
         mediaService.deleteById(mediaId);
     }
 

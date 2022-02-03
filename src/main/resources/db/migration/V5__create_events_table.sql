@@ -5,8 +5,6 @@ CREATE TABLE IF NOT EXISTS events
     media_id int(11),
     user_id int(11),
     PRIMARY KEY  (id),
-    FOREIGN KEY (media_id) REFERENCES media (id) ON DELETE CASCADE,
-    FOREIGN KEY (media_id) REFERENCES media (id) ON UPDATE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE
+    FOREIGN KEY (media_id) REFERENCES media (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );

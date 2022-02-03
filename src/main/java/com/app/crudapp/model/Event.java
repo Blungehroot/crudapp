@@ -20,11 +20,11 @@ public class Event implements Serializable {
     @Column(name = "eventname")
     private EventActions eventName;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "media_id", referencedColumnName = "id")
     private Media media;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User user;
 }
