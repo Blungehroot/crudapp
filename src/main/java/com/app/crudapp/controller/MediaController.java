@@ -1,6 +1,7 @@
 package com.app.crudapp.controller;
 
 
+import com.app.crudapp.dto.MediaDto;
 import com.app.crudapp.dto.UserDto;
 import com.app.crudapp.model.Event;
 import com.app.crudapp.model.Media;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class MediaController {
     }
 
     @PostMapping
-    public ResponseEntity<Media> createMedia(@RequestHeader HttpHeaders httpHeaders, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
+    public ResponseEntity<MediaDto> createMedia(@RequestHeader HttpHeaders httpHeaders, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
         try {
             User user = getUserFromToken(httpHeaders);
             Event event = new Event();
@@ -64,8 +66,9 @@ public class MediaController {
             event.setMedia(media);
             eventService.save(event);
             media.setEvent(event);
+            MediaDto mediaDto = MediaDto.fromMedia(media);
 
-            return new ResponseEntity<>(media, HttpStatus.CREATED);
+            return new ResponseEntity<>(mediaDto, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File with name: " + file.getOriginalFilename() + " is exist");
         }
@@ -75,16 +78,27 @@ public class MediaController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Media> getAllMedia() {
-        return mediaService.getAll();
+    public ResponseEntity<List<MediaDto>> getAllMedia() {
+        List<Media> mediaList = mediaService.getAll();
+        List<MediaDto> result = new ArrayList<>();
+        mediaList.forEach(media ->
+                result.add(MediaDto.fromMedia(media)));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{mediaId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Media getMedia(@PathVariable Integer mediaId) {
-        return mediaService.getById(mediaId);
+    public ResponseEntity<MediaDto> getMedia(@PathVariable Integer mediaId) {
+        Media media = mediaService.getById(mediaId);
+
+        if (media == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        MediaDto mediaDto = MediaDto.fromMedia(media);
+
+        return new ResponseEntity<>(mediaDto, HttpStatus.OK);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
@@ -102,10 +116,15 @@ public class MediaController {
         mediaService.deleteById(mediaId);
     }
 
-    /*@GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Media>> getMyMedia(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
+    @GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MediaDto>> getMyMedia(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
         User user = getUserFromToken(httpHeaders);
+        UserDto userDto = UserDto.fromUser(user);
+        List<Media> mediaList = mediaService.getAllMediaByUserId(userDto.getId());
+        List<MediaDto> result = new ArrayList<>();
+        mediaList.forEach(media ->
+                result.add(MediaDto.fromMedia(media)));
 
-        return new ResponseEntity<>();
-    }*/
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

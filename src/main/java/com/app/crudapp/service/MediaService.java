@@ -18,4 +18,6 @@ public interface MediaService {
     Media update(Media media);
 
     void deleteById(int id);
+
+    List<Media> getAllMediaByUserId(Integer id);
 }

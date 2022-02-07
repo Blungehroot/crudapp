@@ -7,7 +7,6 @@ import com.app.crudapp.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,5 +65,10 @@ public class MediaServiceImpl implements MediaService {
         log.debug("Delete media by id: {}", id);
         Media media = getById(id);
         mediaRepository.delete(media);
+    }
+
+    @Override
+    public List<Media> getAllMediaByUserId(Integer id) {
+        return mediaRepository.getAllByUserId(id);
     }
 }
