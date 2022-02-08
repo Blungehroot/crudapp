@@ -12,7 +12,8 @@ import lombok.Data;
 public class EventDto {
     private Integer id;
     private EventActions eventName;
-    private Media media;
+    private String mediaName;
+    private String mediaUrl;
     private User user;
 
     public static EventDto fromEvent(Event event) {
@@ -21,7 +22,8 @@ public class EventDto {
 
         eventDto.setId(event.getId());
         eventDto.setEventName(event.getEventName());
-        eventDto.setMedia(event.getMedia());
+        eventDto.setMediaName(event.getMediaName());
+        eventDto.setMediaUrl(event.getMediaUrl());
         eventDto.setUser(userDto.toUser(userDto));
 
         return eventDto;

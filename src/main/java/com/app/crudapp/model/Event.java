@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name = "events")
 @Data
 @RequiredArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "media", "user"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user"})
 public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +20,11 @@ public class Event implements Serializable {
     @Column(name = "eventname")
     private EventActions eventName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_id", referencedColumnName = "id")
-    private Media media;
+    @Column(name = "media_name")
+    private String mediaName;
+
+    @Column(name = "media_url")
+    private String mediaUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)

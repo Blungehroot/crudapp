@@ -58,15 +58,19 @@ public class MediaController {
     @PostMapping
     public ResponseEntity<MediaDto> createMedia(@RequestHeader HttpHeaders httpHeaders, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
         try {
+            MediaDto mediaDto = new MediaDto();
             User user = getUserFromToken(httpHeaders);
             Event event = new Event();
             Media media = mediaService.save(file, user);
-            event.setEventName(CREATE);
-            event.setUser(user);
-            event.setMedia(media);
-            eventService.save(event);
-            media.setEvent(event);
-            MediaDto mediaDto = MediaDto.fromMedia(media);
+
+            if (media != null) {
+                event.setEventName(CREATE);
+                event.setMediaName(media.getName());
+                event.setMediaUrl(media.getUrl());
+                event.setUser(user);
+                eventService.save(event);
+                mediaDto = MediaDto.fromMedia(media);
+            }
 
             return new ResponseEntity<>(mediaDto, HttpStatus.CREATED);
         } catch (RuntimeException e) {
@@ -108,12 +112,15 @@ public class MediaController {
         User user = getUserFromToken(httpHeaders);
         Event event = new Event();
         Media media = mediaService.getById(mediaId);
-        log.info("Get media: {}", media.getId());
-        event.setEventName(DELETE);
-        event.setUser(user);
-        event.setMedia(media);
-        eventService.save(event);
-        mediaService.deleteById(mediaId);
+
+        if (media != null) {
+            mediaService.deleteById(mediaId);
+            event.setEventName(DELETE);
+            event.setUser(user);
+            event.setMediaName(media.getName());
+            event.setMediaUrl(media.getUrl());
+            eventService.save(event);
+        }
     }
 
     @GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
