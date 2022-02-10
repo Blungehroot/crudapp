@@ -1,6 +1,5 @@
 package com.app.crudapp.service.impl;
 
-import com.app.crudapp.dto.UserDto;
 import com.app.crudapp.model.Role;
 import com.app.crudapp.model.User;
 import com.app.crudapp.repository.RoleRepository;
@@ -9,9 +8,6 @@ import com.app.crudapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
