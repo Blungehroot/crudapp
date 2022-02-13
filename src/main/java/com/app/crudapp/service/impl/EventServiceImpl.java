@@ -37,17 +37,4 @@ public class EventServiceImpl implements EventService {
         log.debug("The new event was created, id: {}", event.getId());
         return event;
     }
-
-    @Override
-    public Event update(Event event) {
-        log.info("Starting update the event with id: {}", event.getId());
-        return eventRepository.save(event);
-    }
-
-    @Override
-    public void deleteById(int id) {
-        log.debug("Delete event by id: {}", id);
-        Event event = getById(id);
-        eventRepository.delete(event);
-    }
 }
