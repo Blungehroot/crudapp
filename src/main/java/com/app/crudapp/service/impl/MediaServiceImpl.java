@@ -48,8 +48,8 @@ public class MediaServiceImpl implements MediaService {
         }
         media.setName(file.getOriginalFilename());
         media.setUrl(root + "/" + file.getOriginalFilename());
-        media = mediaRepository.save(media);
         media.setUser(user);
+        media = mediaRepository.save(media);
         log.debug("The new media was created, id: {}", media.getId());
         return media;
     }
