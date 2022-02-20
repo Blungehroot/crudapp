@@ -35,6 +35,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
+flyway {
+    url = ${DB}
+    user = ${user}
+    password = ${pass}
+}
+
 test {
     useJUnitPlatform()
 }
