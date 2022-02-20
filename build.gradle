@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 plugins {
-    id "org.flywaydb.flyway" version "8.5.0"
+    id "org.flywaydb.flyway" version "6.2.4"
 }
 
 repositories {
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.flywaydb:flyway-core:${flywayVersion}'
+    compile 'org.flywaydb:flyway-core:6.2.4'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.security:spring-security-core:5.6.1'
     implementation 'org.springframework.security:spring-security-web:5.6.1'
