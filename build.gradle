@@ -35,12 +35,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
-flyway {
-    url = System.getenv('DB')
-    user = System.getenv('user')
-    password = System.getenv('pass')
-}
-
 test {
     useJUnitPlatform()
 }
