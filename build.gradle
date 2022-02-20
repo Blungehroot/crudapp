@@ -36,9 +36,9 @@ dependencies {
 }
 
 flyway {
-    url = ${DB}
-    user = ${user}
-    password = ${pass}
+    url = System.getenv('DB')
+    user = System.getenv('user')
+    password = System.getenv('pass')
 }
 
 test {
