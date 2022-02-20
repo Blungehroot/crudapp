@@ -35,6 +35,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
+flyway {
+    url = "${System.getProperty('CLEARDB_DATABASE_URL')}"
+    user = "${System.getProperty("user")}"
+    password = "${System.getProperty("pass")}"
+}
+
 test {
     useJUnitPlatform()
 }
