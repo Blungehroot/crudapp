@@ -37,7 +37,7 @@ dependencies {
 }
 
 flyway {
-    url = "${System.getProperty('CLEARDB_DATABASE_URL')}"
+    url = "${System.getProperty("DB")}"
     user = "${System.getProperty("user")}"
     password = "${System.getProperty("pass")}"
     locations = ['classpath:db/migration']
