@@ -38,8 +38,10 @@ dependencies {
 
 jar {
     manifest {
-        attributes("Implementation-Title": "Gradle",
-                "Implementation-Version": archiveVersion)
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'com/app/crudapp/CrudAppApplication'
+        )
     }
 }
 
