@@ -36,9 +36,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
-bootJar {
+jar {
     manifest {
-        attributes 'Start-Class': 'com.app.crudapp.CrudAppApplication'
+        attributes (
+                'Main-Class': 'com.app.crudapp.CrudAppApplication'
+        )
     }
 }
 
