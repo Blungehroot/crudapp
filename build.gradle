@@ -36,12 +36,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
-jar {
+tasks.jar {
     manifest {
-        attributes(
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'com/app/crudapp/CrudAppApplication'
-        )
+        attributes["Main-Class"] = "com/app/crudapp/CrudAppApplication"
     }
 }
 
