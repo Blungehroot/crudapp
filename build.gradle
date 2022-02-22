@@ -36,6 +36,13 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
+jar {
+    manifest {
+        attributes("Implementation-Title": "Gradle",
+                "Implementation-Version": archiveVersion)
+    }
+}
+
 test {
     useJUnitPlatform()
 }
