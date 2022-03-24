@@ -1,5 +1,8 @@
 package com.app.crudapp.service.impl;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.app.crudapp.aws.AwsClient;
+import com.app.crudapp.converter.FileConverter;
 import com.app.crudapp.model.Media;
 import com.app.crudapp.model.User;
 import com.app.crudapp.repository.MediaRepository;
@@ -7,13 +10,12 @@ import com.app.crudapp.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -21,7 +23,9 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class MediaServiceImpl implements MediaService {
-    private final Path root = Paths.get("src/main/resources/uploads");
+    @Value("${bucket.name}")
+    private static String bucketName;
+    private AmazonS3 s3 = AwsClient.getS3Connection();
 
     @Autowired
     private final MediaRepository mediaRepository;
@@ -41,13 +45,14 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Media save(MultipartFile file, User user) {
         Media media = new Media();
+        String data;
         try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            data = s3.putObject(bucketName, file.getOriginalFilename(), FileConverter.MultipartToFile(file)).getETag();
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
         media.setName(file.getOriginalFilename());
-        media.setUrl(root + "/" + file.getOriginalFilename());
+        media.setUrl(data);
         media.setUser(user);
         media = mediaRepository.save(media);
         log.debug("The new media was created, id: {}", media.getId());
