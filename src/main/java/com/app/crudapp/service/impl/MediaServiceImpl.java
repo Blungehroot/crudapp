@@ -1,6 +1,5 @@
 package com.app.crudapp.service.impl;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.app.crudapp.aws.AwsClient;
 import com.app.crudapp.converter.FileConverter;
 import com.app.crudapp.model.Media;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -24,8 +22,8 @@ import java.util.List;
 @Slf4j
 public class MediaServiceImpl implements MediaService {
     @Value("${bucket.name}")
-    private static String bucketName;
-    private AmazonS3 s3 = AwsClient.getS3Connection();
+    private String bucketName;
+    private AwsClient s3 = new AwsClient();
 
     @Autowired
     private final MediaRepository mediaRepository;
@@ -47,7 +45,7 @@ public class MediaServiceImpl implements MediaService {
         Media media = new Media();
         String data;
         try {
-            data = s3.putObject(bucketName, file.getOriginalFilename(), FileConverter.MultipartToFile(file)).getETag();
+            data = s3.getS3Connection().putObject(bucketName, file.getOriginalFilename(), FileConverter.MultipartToFile(file)).getETag();
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }

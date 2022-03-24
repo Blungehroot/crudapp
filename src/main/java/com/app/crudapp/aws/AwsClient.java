@@ -8,13 +8,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 
-public final class AwsClient {
+public class AwsClient {
     @Value("${aws.access.key}")
-    private static String awsAccessKey;
+    private String awsAccessKey;
     @Value("${aws.secret.key}")
-    private static String awsSecretKey;
+    private String awsSecretKey;
 
-    public static AmazonS3 getS3Connection() {
+    public AmazonS3 getS3Connection() {
         AWSCredentials credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
 
         return AmazonS3ClientBuilder
