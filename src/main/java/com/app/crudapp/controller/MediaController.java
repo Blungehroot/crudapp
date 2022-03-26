@@ -62,7 +62,6 @@ public class MediaController {
             User user = getUserFromToken(httpHeaders);
             Event event = new Event();
             Media media = mediaService.save(file, user);
-            log.info(media.getName() + " " + media.getUrl());
             if (media != null) {
                 event.setEventName(CREATE);
                 event.setMediaName(media.getName());
@@ -71,7 +70,6 @@ public class MediaController {
                 eventService.save(event);
                 mediaDto = MediaDto.fromMedia(media);
             }
-
             return new ResponseEntity<>(mediaDto, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File with name: " + file.getOriginalFilename() + " is exist");
