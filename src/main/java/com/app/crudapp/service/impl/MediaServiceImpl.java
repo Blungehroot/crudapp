@@ -50,7 +50,9 @@ public class MediaServiceImpl implements MediaService {
         try {
             log.info("==================================================");
             log.info("==================================================");
+            log.info("==================================================");
             log.info(String.valueOf(s3.getS3Connection().doesBucketExistV2(bucketName)));
+            log.info("==================================================");
             log.info("==================================================");
             log.info("==================================================");
             String data;
