@@ -62,7 +62,7 @@ public class MediaController {
             User user = getUserFromToken(httpHeaders);
             Event event = new Event();
             Media media = mediaService.save(file, user);
-
+            log.info(media.getName() + " " + media.getUrl());
             if (media != null) {
                 event.setEventName(CREATE);
                 event.setMediaName(media.getName());
