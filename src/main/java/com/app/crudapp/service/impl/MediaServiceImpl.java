@@ -22,8 +22,7 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class MediaServiceImpl implements MediaService {
-    @Value("${bucket.name}")
-    private String bucketName;
+    private String bucketName = System.getenv("bucket.name");
     private AwsClient s3 = new AwsClient();
 
     @Autowired
