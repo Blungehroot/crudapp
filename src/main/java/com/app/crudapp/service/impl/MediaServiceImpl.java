@@ -2,7 +2,6 @@ package com.app.crudapp.service.impl;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.app.crudapp.aws.AwsClient;
-import com.app.crudapp.converter.FileConverter;
 import com.app.crudapp.model.Media;
 import com.app.crudapp.model.User;
 import com.app.crudapp.repository.MediaRepository;
