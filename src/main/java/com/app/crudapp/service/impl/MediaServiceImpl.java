@@ -46,14 +46,6 @@ public class MediaServiceImpl implements MediaService {
         omd.setContentLength(file.getSize());
         Media media = new Media();
         try {
-            log.info("==================================================");
-            log.info("==================================================");
-            log.info("==================================================");
-            log.info(bucketName);
-            log.info(String.valueOf(s3.getS3Connection().doesBucketExistV2(bucketName)));
-            log.info("==================================================");
-            log.info("==================================================");
-            log.info("==================================================");
             String data;
             data = s3.getS3Connection().putObject(bucketName, file.getOriginalFilename(), file.getInputStream(), omd).getETag();
             media.setName(file.getOriginalFilename());
