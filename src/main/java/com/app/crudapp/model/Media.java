@@ -24,7 +24,7 @@ public class Media implements Serializable {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_media", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "media_id", referencedColumnName = "id")})
+    @JoinTable(name = "user_media", joinColumns = {@JoinColumn(name = "media_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
     private User user;
 }
