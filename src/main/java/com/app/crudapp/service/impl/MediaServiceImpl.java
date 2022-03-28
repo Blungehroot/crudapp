@@ -46,10 +46,9 @@ public class MediaServiceImpl implements MediaService {
         omd.setContentLength(file.getSize());
         Media media = new Media();
         try {
-            String data;
-            data = s3.getS3Connection().putObject(bucketName, file.getOriginalFilename(), file.getInputStream(), omd).getETag();
+            s3.getS3Connection().putObject(bucketName, file.getOriginalFilename(), file.getInputStream(), omd);
             media.setName(file.getOriginalFilename());
-            media.setUrl(data);
+            media.setUrl(s3.getS3Connection().getUrl(bucketName, file.getOriginalFilename()).toString());
             media.setUser(user);
             media = mediaRepository.save(media);
             log.info("The new media was created, id: {}", media.getId());
