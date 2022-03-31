@@ -122,16 +122,15 @@ public class MediaController {
     }
 
     @GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<List<MediaDto>> getMyMedia(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
         User user = getUserFromToken(httpHeaders);
         UserDto userDto = UserDto.fromUser(user);
-        log.info("USER ID:=============>>>>>" + userDto.getId().toString());
         List<Media> mediaList = mediaService.getAllMediaByUserId(userDto.getId());
-        log.info("MEDIA:=======>>>" + mediaList.get(0).getName().toString());
         List<MediaDto> result = new ArrayList<>();
         mediaList.forEach(media ->
                 result.add(MediaDto.fromMedia(media)));
-        log.info("MEDIA:=======>>>" + result.get(0).getName().toString());
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

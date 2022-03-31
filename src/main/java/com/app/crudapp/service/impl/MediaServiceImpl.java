@@ -62,6 +62,7 @@ public class MediaServiceImpl implements MediaService {
     public void deleteById(int id) {
         log.debug("Delete media by id: {}", id);
         Media media = getById(id);
+        s3.getS3Connection().deleteObject(bucketName, media.getName());
         mediaRepository.delete(media);
     }
 
