@@ -59,12 +59,6 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public Media update(Media media) {
-        log.info("Starting update the media with id: {}", media.getId());
-        return mediaRepository.save(media);
-    }
-
-    @Override
     public void deleteById(int id) {
         log.debug("Delete media by id: {}", id);
         Media media = getById(id);
