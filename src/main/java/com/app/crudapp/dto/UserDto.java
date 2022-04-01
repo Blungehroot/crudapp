@@ -3,6 +3,7 @@ package com.app.crudapp.dto;
 import com.app.crudapp.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public class UserDto {
     private String name;
     private Status status;
     private List<Role> roles;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
     @JsonIgnore
     private List<Event> events;
 

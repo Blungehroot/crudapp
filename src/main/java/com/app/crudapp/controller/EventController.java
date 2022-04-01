@@ -1,7 +1,6 @@
 package com.app.crudapp.controller;
 
 import com.app.crudapp.dto.EventDto;
-import com.app.crudapp.model.Event;
 import com.app.crudapp.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +28,8 @@ public class EventController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EventDto>> getAllEvents() {
-        List<Event> events = eventService.getAll();
         List<EventDto> result = new ArrayList<>();
-        events.forEach(event -> result.add(EventDto.fromEvent(event)));
+        eventService.getAll().forEach(event -> result.add(EventDto.fromEvent(event)));
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -39,13 +37,7 @@ public class EventController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{eventId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EventDto> getEventById(@PathVariable Integer eventId) {
-        Event event = eventService.getById(eventId);
-
-        if (event == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        EventDto eventDto = EventDto.fromEvent(event);
+        EventDto eventDto = EventDto.fromEvent(eventService.getById(eventId));
 
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }

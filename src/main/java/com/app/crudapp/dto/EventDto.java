@@ -16,6 +16,7 @@ public class EventDto {
     private String mediaUrl;
     private User user;
 
+    @JsonIgnoreProperties
     public static EventDto fromEvent(Event event) {
         EventDto eventDto = new EventDto();
         UserDto userDto = UserDto.fromUser(event.getUser());
