@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -51,9 +51,8 @@ public class UserController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<User> users = userService.getAll();
         List<UserDto> result = new ArrayList<>();
-        users.forEach(user ->
+        userService.getAll().forEach(user ->
                 result.add(UserDto.fromUser(user)));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -61,13 +60,7 @@ public class UserController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUser(@PathVariable Integer userId) {
-        User user = userService.getById(userId);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        UserDto result = UserDto.fromUser(user);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(UserDto.fromUser(userService.getById(userId)), HttpStatus.OK);
     }
 
     @Secured("ROLE_ADMIN")

@@ -37,8 +37,6 @@ public class EventController {
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @GetMapping(value = "/{eventId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EventDto> getEventById(@PathVariable Integer eventId) {
-        EventDto eventDto = EventDto.fromEvent(eventService.getById(eventId));
-
-        return new ResponseEntity<>(eventDto, HttpStatus.OK);
+        return new ResponseEntity<>(EventDto.fromEvent(eventService.getById(eventId)), HttpStatus.OK);
     }
 }
