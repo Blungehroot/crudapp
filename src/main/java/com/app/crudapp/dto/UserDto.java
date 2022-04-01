@@ -15,8 +15,6 @@ public class UserDto {
     private String name;
     private Status status;
     private List<Role> roles;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
     @JsonIgnore
     private List<Event> events;
 
