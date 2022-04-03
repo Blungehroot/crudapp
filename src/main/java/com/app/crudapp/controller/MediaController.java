@@ -4,7 +4,6 @@ package com.app.crudapp.controller;
 import com.app.crudapp.dto.MediaDto;
 import com.app.crudapp.dto.UserDto;
 import com.app.crudapp.model.Event;
-import com.app.crudapp.model.Media;
 import com.app.crudapp.model.User;
 import com.app.crudapp.service.EventService;
 import com.app.crudapp.service.MediaService;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -57,23 +55,16 @@ public class MediaController {
 
     @PostMapping
     public ResponseEntity<MediaDto> createMedia(@RequestHeader HttpHeaders httpHeaders, @RequestParam("file") MultipartFile file) throws JsonProcessingException {
-        try {
-            MediaDto mediaDto = new MediaDto();
-            User user = getUserFromToken(httpHeaders);
-            Event event = new Event();
-            Media media = mediaService.save(file, user);
-            if (media != null) {
-                event.setEventName(CREATE);
-                event.setMediaName(media.getName());
-                event.setMediaUrl(media.getUrl());
-                event.setUser(user);
-                eventService.save(event);
-                mediaDto = MediaDto.fromMedia(media);
-            }
-            return new ResponseEntity<>(mediaDto, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File with name: " + file.getOriginalFilename() + " is exist");
-        }
+        User user = getUserFromToken(httpHeaders);
+        Event event = new Event();
+        MediaDto mediaDto = MediaDto.fromMedia(mediaService.save(file, user));
+        event.setEventName(CREATE);
+        event.setMediaName(mediaDto.getName());
+        event.setMediaUrl(mediaDto.getUrl());
+        event.setUser(user);
+        eventService.save(event);
+
+        return new ResponseEntity<>(mediaDto, HttpStatus.CREATED);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
@@ -81,10 +72,10 @@ public class MediaController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<List<MediaDto>> getAllMedia() {
-        List<Media> mediaList = mediaService.getAll();
         List<MediaDto> result = new ArrayList<>();
-        mediaList.forEach(media ->
+        mediaService.getAll().forEach(media ->
                 result.add(MediaDto.fromMedia(media)));
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -93,14 +84,7 @@ public class MediaController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<MediaDto> getMedia(@PathVariable Integer mediaId) {
-        Media media = mediaService.getById(mediaId);
-
-        if (media == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        MediaDto mediaDto = MediaDto.fromMedia(media);
-
-        return new ResponseEntity<>(mediaDto, HttpStatus.OK);
+        return new ResponseEntity<>(MediaDto.fromMedia(mediaService.getById(mediaId)), HttpStatus.OK);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
@@ -109,16 +93,14 @@ public class MediaController {
     public void deleteMedia(@RequestHeader HttpHeaders httpHeaders, @PathVariable Integer mediaId) throws JsonProcessingException {
         User user = getUserFromToken(httpHeaders);
         Event event = new Event();
-        Media media = mediaService.getById(mediaId);
+        MediaDto mediaDto = MediaDto.fromMedia(mediaService.getById(mediaId));
+        mediaService.deleteById(mediaId);
+        event.setEventName(DELETE);
+        event.setUser(user);
+        event.setMediaName(mediaDto.getName());
+        event.setMediaUrl(mediaDto.getUrl());
+        eventService.save(event);
 
-        if (media != null) {
-            mediaService.deleteById(mediaId);
-            event.setEventName(DELETE);
-            event.setUser(user);
-            event.setMediaName(media.getName());
-            event.setMediaUrl(media.getUrl());
-            eventService.save(event);
-        }
     }
 
     @GetMapping(value = "/my-media", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -126,9 +108,8 @@ public class MediaController {
     public ResponseEntity<List<MediaDto>> getMyMedia(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
         User user = getUserFromToken(httpHeaders);
         UserDto userDto = UserDto.fromUser(user);
-        List<Media> mediaList = mediaService.getAllMediaByUserId(userDto.getId());
         List<MediaDto> result = new ArrayList<>();
-        mediaList.forEach(media ->
+        mediaService.getAllMediaByUserId(userDto.getId()).forEach(media ->
                 result.add(MediaDto.fromMedia(media)));
 
         return new ResponseEntity<>(result, HttpStatus.OK);

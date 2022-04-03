@@ -43,9 +43,7 @@ public class UserController {
     @Secured("ROLE_ADMIN")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        User create = userService.save(user);
-        UserDto result = UserDto.fromUser(create);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+        return new ResponseEntity<>(UserDto.fromUser(userService.save(user)), HttpStatus.CREATED);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
@@ -73,12 +71,9 @@ public class UserController {
     @GetMapping(value = "/my-info", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getMyInfo(@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException {
         User user = getUserFromToken(httpHeaders);
-        UserDto userDto = UserDto.fromUser(user);
-
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+        return new ResponseEntity<>(UserDto.fromUser(user), HttpStatus.OK);
     }
 
-    //TODO:Update this method
     @PutMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
